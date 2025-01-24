@@ -1,5 +1,5 @@
 {
-  "station": "Seven Sisters",
+  "station": "Hammersmith (Dist&Picc Line)",
   "direction": "Inbound",
   "updated_on": "2024-03-09T13:00:16+01:00"
 }
