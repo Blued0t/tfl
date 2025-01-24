@@ -1,4 +1,3 @@
-// netlify/functions/updateStation.js
 const axios = require('axios');
 
 exports.handler = async (event) => {
