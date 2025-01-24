@@ -1,4 +1,14 @@
+exports.handler = async (event) => {
+    // Use the built-in fetch API
+    const response = await fetch('https://api.example.com');
+    const data = await response.json();
+    return {
+        statusCode: 200,
+        body: JSON.stringify(data),
+    };
+};
 const fetch = require('node-fetch');
+
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
