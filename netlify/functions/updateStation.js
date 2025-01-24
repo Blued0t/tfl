@@ -7,11 +7,15 @@ exports.handler = async (event) => {
     }
 
     const { stationName } = JSON.parse(event.body);
-    const filePath = path.join(__dirname, '..', 'station.txt'); // Path to station.txt
+    const filePath = path.join(__dirname, '..', 'public', 'station.txt'); // Path to station.txt
+
+    console.log('Received station name:', stationName);
+    console.log('File path:', filePath);
 
     try {
         // Write the new station name to station.txt
         fs.writeFileSync(filePath, stationName);
+        console.log('File updated successfully.');
 
         return { statusCode: 200, body: 'Station name updated successfully!' };
     } catch (error) {
