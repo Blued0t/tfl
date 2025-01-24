@@ -7,7 +7,7 @@ exports.handler = async (event) => {
     }
 
     const { stationName } = JSON.parse(event.body);
-    const filePath = path.join(__dirname, '..', 'public', 'station.txt'); // Path to station.txt
+    const filePath = path.join(__dirname, '..', 'station.txt'); // Path to station.txt
 
     console.log('Received station name:', stationName);
     console.log('File path:', filePath);
