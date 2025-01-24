@@ -60,3 +60,8 @@ exports.handler = async (event) => {
   } catch (error) {
     console.error('Error:', error.response ? error.response.data : error.message);
     return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Failed to update station name.' }),
+    };
+  }
+};
