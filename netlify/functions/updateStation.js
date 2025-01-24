@@ -1,14 +1,5 @@
-exports.handler = async (event) => {
-    // Use the built-in fetch API
-    const response = await fetch('https://api.example.com');
-    const data = await response.json();
-    return {
-        statusCode: 200,
-        body: JSON.stringify(data),
-    };
-};
-const fetch = require('node-fetch');
-
+const fs = require('fs');
+const path = require('path');
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -16,46 +7,15 @@ exports.handler = async (event) => {
     }
 
     const { stationName } = JSON.parse(event.body);
-    const githubToken = process.env.GITHUB_TOKEN; // Store your GitHub token in Netlify environment variables
-    const repoOwner = 'Blued0t'; // Replace with your GitHub username
-    const repoName = 'tfl'; // Replace with your repository name
-    const filePath = 'station.txt'; // Path to the file in the repository
-    const commitMessage = 'Update station.txt'; // Commit message
+    const filePath = path.join(__dirname, '..', 'station.txt'); // Path to station.txt
 
-    // Get the current SHA of the file
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
-    const fileResponse = await fetch(apiUrl, {
-        headers: {
-            Authorization: `token ${githubToken}`,
-            'User-Agent': 'Netlify Function',
-        },
-    });
+    try {
+        // Write the new station name to station.txt
+        fs.writeFileSync(filePath, stationName);
 
-    if (!fileResponse.ok) {
-        return { statusCode: fileResponse.status, body: 'Failed to fetch file info' };
+        return { statusCode: 200, body: 'Station name updated successfully!' };
+    } catch (error) {
+        console.error('Error:', error);
+        return { statusCode: 500, body: 'Failed to update station name.' };
     }
-
-    const fileInfo = await fileResponse.json();
-    const sha = fileInfo.sha;
-
-    // Update the file
-    const updateResponse = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-            Authorization: `token ${githubToken}`,
-            'User-Agent': 'Netlify Function',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            message: commitMessage,
-            content: Buffer.from(stationName).toString('base64'),
-            sha: sha,
-        }),
-    });
-
-    if (!updateResponse.ok) {
-        return { statusCode: updateResponse.status, body: 'Failed to update file' };
-    }
-
-    return { statusCode: 200, body: 'File updated successfully!' };
 };
